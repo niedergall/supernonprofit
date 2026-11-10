@@ -1372,9 +1372,9 @@ function updatePlayer(g,p,dt,inp){
     O=ps?options(g,p,tg.s):{text:'Set the crate down',press:()=>dropCrate(g,p.carry)};
     if(!bot&&p.id===g.meId){g.tgt=ps?tg.s:p.carry;g.hint=O.text;}
   }
-  if(!bot&&p.id===g.meId&&!(O&&O.press)){const di=dropInfo(g,p);if(di){g.tgt={type:'hint',x:p.x,y:p.y-40,w:0,h:0};g.hint=di.text;}}
+  if(!bot&&p.id===g.meId&&!(O&&(O.press||O.work))){const di=dropInfo(g,p);if(di){g.tgt={type:'hint',x:p.x,y:p.y-40,w:0,h:0};g.hint=di.text;}}
   if(O&&edge&&O.press)O.press();
-  else if(edge&&!bot&&p.held&&!p.vehicle){
+  else if(edge&&!bot&&p.held&&!p.vehicle&&!(O&&O.work)){
     const di=dropInfo(g,p),q=di&&di.q;
     if(q){q.held=p.held;p.held=null;sfx.pick();pop(g,q.x,q.y-30,'Got it!','#9fe8ff');}
     else if(di)dropItem(g,p);
@@ -3473,7 +3473,7 @@ function computeHint(g,p){
   const tg=findTarget(g,p);let O=null;
   if(tg){O=tg.s?options(g,p,tg.s):vehOptions(g,p,tg.v);g.tgt=tg.s||tg.v;g.hint=O.text;}
   if(p.carry){const ps=!!(tg&&tg.s&&tg.s.type==='platform');O=ps?options(g,p,tg.s):{text:'Set the crate down'};g.tgt=ps?tg.s:p.carry;g.hint=O.text;}
-  if(!p.carry&&!(O&&O.press)){const di=dropInfo(g,p);if(di){g.tgt={type:'hint',x:p.x,y:p.y-40,w:0,h:0};g.hint=di.text;}}
+  if(!p.carry&&!(O&&(O.press||O.work))){const di=dropInfo(g,p);if(di){g.tgt={type:'hint',x:p.x,y:p.y-40,w:0,h:0};g.hint=di.text;}}
 }
 /* client-side prediction: move my own character (or vehicle) at once, then ease toward the host's authoritative position */
 function predictMe(g,p,dt){
