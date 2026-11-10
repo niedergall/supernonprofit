@@ -3,7 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>Super Nonprofit</title>
+<title>Super Nonprofit! - a free co-op publishing house game</title>
+<meta name="description" content="Super Nonprofit! is a free, co-op browser game. Run a tiny publishing house with up to 4 friends or bots: answer customer calls, pick, pack and ship orders, drive the forklift, fix computers and mow the lawn. No download needed.">
+<meta name="theme-color" content="#17212b">
+<link rel="canonical" href="https://niedergall.com/supernonprofit/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23e0553d'/%3E%3Cpath d='M14 46V20l18 10V20l18 10v16z' fill='%23fffaf0' stroke='%233a2f1f' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Super Nonprofit!">
+<meta property="og:title" content="Super Nonprofit! - a free co-op publishing house game">
+<meta property="og:description" content="Run a tiny publishing house. Everyone does everything. Nothing is on fire (yet). Play free in your browser, solo or with up to 4 players.">
+<meta property="og:url" content="https://niedergall.com/supernonprofit/">
+<meta property="og:image" content="https://niedergall.com/supernonprofit/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Super Nonprofit! title over a top-down view of a busy publishing house">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Super Nonprofit! - a free co-op publishing house game">
+<meta name="twitter:description" content="Run a tiny publishing house. Play free in your browser, solo or with up to 4 players.">
+<meta name="twitter:image" content="https://niedergall.com/supernonprofit/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Super Nonprofit!","url":"https://niedergall.com/supernonprofit/","image":"https://niedergall.com/supernonprofit/og-image.png","description":"Super Nonprofit! is a free, co-op browser game. Run a tiny publishing house with up to 4 friends or bots: answer customer calls, pick, pack and ship orders, drive the forklift, fix computers and mow the lawn. No download needed.","genre":["Simulation","Cooperative","Casual"],"gamePlatform":"Web browser","applicationCategory":"Game","operatingSystem":"Any","playMode":["SinglePlayer","CoOp"],"numberOfPlayers":{"@type":"QuantitativeValue","minValue":1,"maxValue":4},"inLanguage":"en","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"Niedergall"}}</script>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;background:#17212b;font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;color:#fff;user-select:none;-webkit-user-select:none}
@@ -102,6 +120,7 @@ button.big{background:linear-gradient(#f0654b,#d04a32)}
 </style>
 </head>
 <body>
+<noscript><div style="position:fixed;inset:0;z-index:99;background:#17212b;color:#fff;padding:40px;font:18px/1.5 sans-serif"><h1 style="color:#e0553d">Super Nonprofit!</h1><p>A free co-op game: run a tiny publishing house with up to 4 players. Answer customer calls, pick, pack and ship orders, drive the forklift, fix computers and mow the lawn.</p><p>This game needs JavaScript. Please turn it on and reload the page.</p></div></noscript>
 <canvas id="c"></canvas>
 <div id="touch">
   <div id="joy"><div id="joyKnob"></div></div>
@@ -287,8 +306,7 @@ init(){
   m1.connect(ml);m2.connect(ml);ml.connect(this.mowG);this.mowG.connect(this.master);lf.connect(lg);lg.connect(this.mowG.gain);
   m1.start();m2.start();lf.start();this.mow1=m1;this.mow2=m2;
   const mkLoop=(fc,type,q)=>{const sr=c.createBufferSource();sr.buffer=nb;sr.loop=true;const f=c.createBiquadFilter();f.type=type;f.frequency.value=fc;if(q)f.Q.value=q;const gn=c.createGain();gn.gain.value=0;sr.connect(f);f.connect(gn);gn.connect(this.master);sr.start();return gn;};
-  this.rainG=mkLoop(3200,'bandpass',.5);this.ambG=mkLoop(260,'lowpass');
-  const hm=c.createOscillator(),hg=c.createGain();hm.frequency.value=118;hg.gain.value=0;hm.connect(hg);hg.connect(this.master);hm.start();this.humG=hg;
+  this.rainG=mkLoop(3200,'bandpass',.5);
 },
 resume(){if(this.ctx&&this.ctx.state==='suspended')this.ctx.resume();},
 tone(f,d,type,v,f2,delay){
@@ -307,7 +325,7 @@ noise(d,v,fc,delay){
 engine(v,f){if(!this.ctx)return;const t=this.ctx.currentTime;this.engG.gain.setTargetAtTime(this.muted?0:v,t,.08);if(f)this.eng.frequency.setTargetAtTime(f,t,.1);},
 mow(v,f){if(!this.ctx)return;const t=this.ctx.currentTime;this.mowG.gain.setTargetAtTime(this.muted?0:v,t,.08);if(f){this.mow1.frequency.setTargetAtTime(f,t,.1);this.mow2.frequency.setTargetAtTime(f*1.51,t,.1);}},
 rain(v){if(!this.ctx)return;this.rainG.gain.setTargetAtTime(v,this.ctx.currentTime,.3);},
-amb(v){if(!this.ctx)return;const t=this.ctx.currentTime;this.ambG.gain.setTargetAtTime(v,t,.4);this.humG.gain.setTargetAtTime(v*.1,t,.4);},
+amb(){},
 setMuted(m){this.muted=m;this.applyVol();if(m){this.engine(0);this.mow(0);}},
 startMusic(){if(!this.ctx||this.mus||Mus.usable())return;this.step=0;this.mus=setInterval(()=>this.musicStep(),240);},
 stopMusic(){clearInterval(this.mus);this.mus=null;this.engine(0);this.mow(0);},
@@ -400,7 +418,7 @@ hydro:()=>{Snd.noise(.4,.1,900);Snd.tone(90,.4,'sawtooth',.05,170);Snd.tone(170,
 thunder:()=>{Snd.noise(2.4,.22,180);Snd.tone(46,1.8,'sine',.14,28);Snd.noise(1.2,.1,420,.5);},
 vroom:a=>{Snd.tone(68,.3,'sawtooth',.08*a,108);Snd.noise(.22,.06*a,300);},
 rev:a=>Snd.tone(800,.17,'square',.07*a),
-truckhorn:()=>{for(const [f,d] of [[0,0],[.5,.12]]){Snd.tone(131,.34+d,'sawtooth',.11,125,f);Snd.tone(165,.34+d,'sawtooth',.09,160,f);Snd.tone(262,.3+d,'square',.025,255,f);}},
+truckhorn:()=>{for(const [f,d] of [[0,0],[.55,.2]]){Snd.tone(220,.42+d,'sawtooth',.2,214,f);Snd.tone(277,.42+d,'sawtooth',.17,270,f);Snd.tone(440,.36+d,'square',.05,430,f);}},
 honk:()=>{Snd.tone(196,.5,'sawtooth',.09);Snd.tone(247,.5,'sawtooth',.07);},
 crash:()=>{Snd.noise(.45,.35,500);Snd.tone(220,.4,'sawtooth',.1,40);},
 tick:()=>Snd.tone(900,.05,'square',.07),
@@ -449,7 +467,7 @@ rooms.forEach(addWalls);
 const BEDS=[[900,215,150],[1480,215,110],[1650,215,120],[1980,300,24],[1980,420,24],[160,656,90]];
 const TREES=[[40,120,40],[150,70,34],[430,60,38],[700,90,32],[1700,150,44],[1900,90,36],[2090,220,42],[2110,700,40],[2060,1010,34],[60,640,30]];
 const OBST=BEDS.map(([x,y,w])=>({x,y,w,h:w<40?100:22})).concat(TREES.map(([x,y,s])=>({x:x-9,y:y+s*.4,w:18,h:s*.6})));
-let solids=walls.concat(OBST);
+let solids=walls.concat(OBST),dynSolids=[],VAC=null;
 
 function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
 function shade(hex,a){const n=parseInt(hex.slice(1),16);return `rgb(${clamp((n>>16)+a,0,255)},${clamp(((n>>8)&255)+a,0,255)},${clamp((n&255)+a,0,255)})`;}
@@ -780,7 +798,23 @@ function makeOrder(g,src){
   if(big)toast(g,'LARGE ORDER #'+o.id+': '+n+' books! Worth bonus points. Your packing box holds up to 6.',5.5);
   return o;
 }
-const TRUCK_LEN=375;
+const TRUCK_LEN=375,TRUCK_W=345;
+function setDynSolids(g){const vc=g.stations&&g.stations.find(q=>q.type==='vac');VAC=vc?{x:vc.cx,y:vc.cy}:null;dynSolids=[];for(const t of [g.truck,...(g.truckQ||[]),...(g.truckOut||[])])if(t)dynSolids.push({x:t.x+262,y:1206,w:82,h:118});}
+function truckBlocker(g,tr){
+  const hit=(x,y,r)=>x>tr.x-r&&x<tr.x+TRUCK_W+45+r&&y>1190-r-6&&y<1340+r+6;
+  for(const p of g.players){if(p.vehicle)continue;if(hit(p.x,p.y,13))return {x:p.x,y:p.y,who:p};}
+  for(const v of [g.fork,g.mower])if(hit(v.x,v.y,v.r))return {x:v.x,y:v.y,who:v};
+  return null;
+}
+/* a truck only moves while nobody is in its way; it honks and waits */
+function truckGo(g,tr,dt){
+  const b=truckBlocker(g,tr);
+  if(!b){tr.hold=0;return true;}
+  tr.hold=(tr.hold||0)+dt;tr.honkT=(tr.honkT||0)-dt;
+  if(tr.honkT<=0){tr.honkT=3;sfx.honk();pop(g,b.x,b.y-40,b.who===g.fork?'Move the forklift!':'Truck coming through!','#ff9a9a');}
+  const fk=g.fork;if(b.who===fk&&!fk.driver&&tr.hold>6){fk.x=430;fk.y=930;fk.ang=Math.PI/2;fk.moving=false;pop(g,430,890,'Forklift moved back','#ffd27a');}
+  return false;
+}
 function callTruck(g,items,kind){
   kind=kind||'book';g.truckQ=g.truckQ||[];g.truckOut=g.truckOut||[];
   for(const it of items){
@@ -796,8 +830,9 @@ function truckStep(g,dt){
   g.truckQ=g.truckQ||[];g.truckOut=g.truckOut||[];
   if(!g.truck&&g.truckQ.length){const t=g.truckQ.shift();t.state='in';t.wait=0;t.hold=0;g.truck=t;if(t.kind==='box')toast(g,'The box delivery truck is here!',3);}
   /* waiting trucks creep up and line up bumper to bumper behind the one at the dock */
-  g.truckQ.forEach((q,k)=>{const base=g.truck?g.truck.x:270,slot=base-TRUCK_LEN*(k+1);q.x=q.x<slot?Math.min(slot,q.x+260*dt):Math.max(slot,q.x-260*dt);});
-  for(const o of g.truckOut)o.x+=260*dt;
+  g.truckQ.forEach((q,k)=>{const base=g.truck?g.truck.x:270,slot=base-TRUCK_LEN*(k+1);if(q.x<slot&&truckGo(g,q,dt))q.x=Math.min(slot,q.x+260*dt);});
+  for(const o of g.truckOut)if(truckGo(g,o,dt))o.x+=260*dt;
+  setDynSolids(g);
   g.truckOut=g.truckOut.filter(o=>o.x<2300);
 }
 function spawnCrate(g,tb,m){
@@ -1203,7 +1238,7 @@ function angLerp(a,b,t){const d=((b-a+Math.PI)%(2*Math.PI)+2*Math.PI)%(2*Math.PI
 
 /* ===================== simulation ===================== */
 function collide(e,r){
-  for(let pass=0;pass<2;pass++)for(const s of solids){
+  for(let pass=0;pass<2;pass++)for(const s of (dynSolids.length?solids.concat(dynSolids):solids)){
     const cx=clamp(e.x,s.x,s.x+s.w),cy=clamp(e.y,s.y,s.y+s.h),dx=e.x-cx,dy=e.y-cy,d2=dx*dx+dy*dy;
     if(d2<r*r){
       if(d2>.0001){const d=Math.sqrt(d2),push=r-d;e.x+=dx/d*push;e.y+=dy/d*push;}
@@ -1211,6 +1246,8 @@ function collide(e,r){
         if(m===l)e.x=s.x-r;else if(m===rr_)e.x=s.x+s.w+r;else if(m===t)e.y=s.y-r;else e.y=s.y+s.h+r;}
     }
   }
+  if(VAC&&!e.novac){const dx=e.x-VAC.x,dy=e.y-VAC.y,d=Math.hypot(dx,dy),m=r+11;
+    if(d<m){if(d>.01){e.x=VAC.x+dx/d*m;e.y=VAC.y+dy/d*m;}else e.x+=m;}}
   e.x=clamp(e.x,r,WORLD.w-r);e.y=clamp(e.y,r,WORLD.h-r);
 }
 /* people and driven vehicles shove each other; head-on pairs slip sideways so nobody is stuck forever */
@@ -1686,18 +1723,14 @@ function update(g,dt,inputs){
   if(g.van.away){g.van.timer-=dt;if(g.van.timer<=0){g.van.away=false;sfx.ding();toast(g,'The rep is back with convention orders!');for(let i=0;i<3;i++)g.pending.push({left:.6+i*2.2});}}
   /* print + trucks */
   for(let i=g.printJobs.length-1;i>=0;i--){const j=g.printJobs[i];j.left-=dt;if(j.left<=0){g.printJobs.splice(i,1);callTruck(g,[j.t],'book');toast(g,'Books are printed! A truck is on the way.');}}
-  if(g.cfg.truckEvery){g.truckT-=dt;if(g.truckT<=0){g.truckT=g.cfg.truckEvery*rnd(.8,1.2);callTruck(g,[Math.floor(R()*3)],'book');toast(g,'A donated pallet is arriving!');}}
+  if(g.cfg.truckEvery){g.truckT-=dt;if(g.truckT<=0){g.truckT=g.cfg.truckEvery*rnd(.8,1.2);callTruck(g,[Math.floor(R()*3)],'book');toast(g,'A pallet is arriving!');}}
   const tr=g.truck;
   if(tr){
     if(tr.state==='in'){
-      const fk=g.fork,blocked=tr.x>=-80&&fk.x>230&&fk.x<660&&fk.y>1165&&fk.y<1370;
-      if(blocked){ /* a parked forklift is in the way: the truck waits outside and honks */
-        tr.x=Math.min(tr.x,-80);tr.hold=(tr.hold||0)+dt;tr.honkT=(tr.honkT||0)-dt;
-        if(tr.honkT<=0){tr.honkT=3;sfx.honk();pop(g,fk.x,fk.y-40,'Move the forklift!','#ff9a9a');}
-        if(!fk.driver&&tr.hold>6){fk.x=430;fk.y=930;fk.ang=Math.PI/2;fk.moving=false;pop(g,430,890,'Forklift moved back','#ffd27a');}
-      }else{
-        tr.hold=0;tr.x+=260*dt;
-        if(tr.x>=270){tr.x=270;tr.state='wait';tr.wait=0;sfx.truckhorn();toast(g,'Truck at the dock! Unload it with the forklift.');}
+      if(truckGo(g,tr,dt)){
+        tr.x+=260*dt;
+        if(!tr.horned&&tr.x>=40){tr.horned=true;sfx.truckhorn();}
+        if(tr.x>=270){tr.x=270;tr.state='wait';tr.wait=0;if(!tr.horned){tr.horned=true;sfx.truckhorn();}toast(g,'Truck at the dock! Unload it with the forklift.');}
       }
     }
     else if(tr.state==='wait'){if(tr.pallets.length===0){tr.wait+=dt;if(tr.wait>2){tr.state='out';g.truckOut.push(tr);g.truck=null;}}else tr.wait=0;}
@@ -1753,7 +1786,10 @@ function vacStep(g,dt){
   if(v.st==='run'){
     const dx=v.tx-v.cx,dy=v.ty-v.cy,d=Math.hypot(dx,dy),newWp=()=>{const w=VAC_WP[Math.floor(R()*VAC_WP.length)];v.tx=w[0];v.ty=w[1];};
     if(d<10)newWp();
-    else{const sp=48,o={x:v.cx+dx/d*sp*dt,y:v.cy+dy/d*sp*dt},ox=v.cx,oy=v.cy;collide(o,12);v.cx=o.x;v.cy=o.y;v.fa=Math.atan2(dy,dx);
+    else{const sp=48,o={x:v.cx+dx/d*sp*dt,y:v.cy+dy/d*sp*dt,novac:1},ox=v.cx,oy=v.cy;
+      const blk=g.players.some(q=>!q.vehicle&&Math.hypot(q.x-(v.cx+dx/d*20),q.y-(v.cy+dy/d*20))<30);
+      if(blk){v.fa=Math.atan2(dy,dx);v.wait=(v.wait||0)+dt;if(v.wait>2.5){newWp();v.wait=0;}v.x=v.cx-13;v.y=v.cy-13;return;}v.wait=0;
+      collide(o,12);v.cx=o.x;v.cy=o.y;v.fa=Math.atan2(dy,dx);
       if(Math.hypot(v.cx-ox,v.cy-oy)<sp*dt*.3){v.stuck+=dt;if(v.stuck>.7){newWp();v.stuck=0;}}else v.stuck=0;}
   }
   v.x=v.cx-13;v.y=v.cy-13;
@@ -1889,6 +1925,7 @@ const onLot=(x,y)=>y>1100||(x>1130&&y>580&&y<1100&&outsideAt(x,y));
 function addMark(m){V.marks.push(m);if(V.marks.length>340)V.marks.shift();}
 function trail(id,x,y,sp,fn){const L=V.last.get(id);if(L&&Math.hypot(x-L.x,y-L.y)<sp)return;const a=L?Math.atan2(y-L.y,x-L.x):0,sd=L?-L.s:1;V.last.set(id,{x,y,s:sd});if(L)fn(a,sd);}
 function viewFx(g,dt){
+  setDynSolids(g);
   V.season=seasonOf(g);
   V.shake*=Math.exp(-dt*8);if(V.shake<.05)V.shake=0;
   if(g.phase==='menu'){V.rainK=0;V.snowK=0;V.snow=0;V.wetK=0;Snd.rain(0);Snd.amb(0);return;}
@@ -1898,7 +1935,7 @@ function viewFx(g,dt){
   V.rainK+=(rk-V.rainK)*Math.min(1,dt*3);V.snowK+=(sk-V.snowK)*Math.min(1,dt*2);
   V.wetK=Math.max(V.wetK,V.rainK);if(rk<.01)V.wetK=Math.max(0,V.wetK-dt/45);
   if(winter){V.snow=Math.min(1,Math.max(V.snow,.55)+V.snowK*dt/45);}else V.snow=Math.max(0,V.snow-dt/12);
-  Snd.rain(live?V.rainK*.15+V.snowK*.04:0);Snd.amb(live?.05:0);
+  Snd.rain(live?V.rainK*.15+V.snowK*.04:0);
   /* thunder: flash first, rumble a moment later */
   V.flash=Math.max(0,V.flash-dt*3.5);
   if(V.rainK>.6&&live){V.thT-=dt;if(V.thT<=0){V.thT=8+VR()*14;V.flash=1;V.thD=.3+VR()*1.3;}}
@@ -2527,18 +2564,27 @@ function drawStation(g,s){
   if(g.tgt===s){ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.globalAlpha=.5+.5*Math.sin(g.t*8);rr(ctx,x-3,y-3,w+6,h+6,12);ctx.stroke();ctx.globalAlpha=1;}
 }
 function drawVac(g,s){
-  const cx=s.x+13,cy=s.y+13,run=s.st==='run',wob=run?0:Math.sin(g.t*14)*(s.why==='dead'?0:.18);
-  ell(cx+1,cy+11,13,5,'rgba(10,14,30,.3)');
-  ctx.save();ctx.translate(cx,cy-2);ctx.rotate((run?s.fa:s.fa+wob));
-  ctx.fillStyle='#cfd6df';ctx.beginPath();ctx.arc(0,0,13,0,7);ctx.fill();
-  ctx.fillStyle='#2f3745';ctx.beginPath();ctx.arc(0,0,10,0,7);ctx.fill();
-  ctx.fillStyle='#e9edf2';ctx.beginPath();ctx.arc(0,0,6.5,0,7);ctx.fill();
-  ctx.strokeStyle='#8e98a8';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(0,0,13,-.9,.9);ctx.stroke();
-  ctx.fillStyle=run?'#5cff8a':(s.why==='dead'?'#3a3f4b':(Math.sin(g.t*10)>0?'#ff5a5a':'#5a1f1f'));ctx.beginPath();ctx.arc(4,0,2.2,0,7);ctx.fill();
-  if(run){ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=2;const a=g.t*14;for(let i=0;i<2;i++){ctx.beginPath();ctx.moveTo(Math.cos(a+i*3.14)*7,Math.sin(a+i*3.14)*7);ctx.lineTo(Math.cos(a+i*3.14)*11,Math.sin(a+i*3.14)*11);ctx.stroke();}}
-  ctx.restore();
-  if(!run){bubble(cx,cy-30+Math.sin(g.t*10)*3,13,'warn','#e0553d');}
-  if(g.tgt===s){ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.globalAlpha=.5+.5*Math.sin(g.t*8);ctx.beginPath();ctx.arc(cx,cy-2,19,0,7);ctx.stroke();ctx.globalAlpha=1;}
+  const cx=s.x+13,cy=s.y+13,run=s.st==='run',wob=run?0:Math.sin(g.t*14)*(s.why==='dead'?0:.18),fa=run?s.fa:s.fa+wob;
+  const RX=13,RY=7.5,H=6,ty=cy-3;               /* top ellipse centre; body is H pixels tall */
+  const pr=(a,k)=>[Math.cos(a)*RX*k,Math.sin(a)*RY*k]; /* project a disc point to the tilted view */
+  ell(cx+1,cy+6,RX+2,RY+1.5,'rgba(10,14,30,.32)');
+  /* side wall */
+  ctx.fillStyle='#8e98a8';ctx.beginPath();ctx.ellipse(cx,ty+H,RX,RY,0,0,Math.PI);ctx.lineTo(cx-RX,ty);ctx.ellipse(cx,ty,RX,RY,0,Math.PI,0,true);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#aab3c0';ctx.beginPath();ctx.ellipse(cx,ty+H,RX,RY,0,0,Math.PI);ctx.lineTo(cx+RX*.2,ty+H+RY*.2);ctx.closePath();
+  ctx.strokeStyle='#6f7a8b';ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(cx,ty+H,RX,RY,0,0,Math.PI);ctx.stroke();
+  /* top plate */
+  ell(cx,ty,RX,RY,'#d7dde6');
+  ctx.strokeStyle='#f4f7fb';ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(cx,ty,RX-.5,RY-.5,0,Math.PI*1.05,Math.PI*1.95);ctx.stroke();
+  ell(cx,ty,RX*.76,RY*.76,'#2f3745');
+  ell(cx,ty,RX*.46,RY*.46,'#e9edf2');
+  /* front bumper arc faces the direction of travel */
+  ctx.strokeStyle='#59647a';ctx.lineWidth=2;ctx.beginPath();for(let k=-6;k<=6;k++){const a=fa+k*.12,[px,py]=pr(a,.98);k?ctx.lineTo(cx+px,ty+py):ctx.moveTo(cx+px,ty+py);}ctx.stroke();
+  /* status light on the front of the top plate */
+  const [lx,ly]=pr(fa,.6);
+  ctx.fillStyle=run?'#5cff8a':(s.why==='dead'?'#3a3f4b':(Math.sin(g.t*10)>0?'#ff5a5a':'#5a1f1f'));ctx.beginPath();ctx.ellipse(cx+lx,ty+ly,2.2,1.4,0,0,7);ctx.fill();
+  if(run){ctx.strokeStyle='rgba(255,255,255,.75)';ctx.lineWidth=1.6;const a=g.t*14;for(let k=0;k<2;k++){const [ax,ay]=pr(a+k*3.14,.55),[bx,by]=pr(a+k*3.14,.9);ctx.beginPath();ctx.moveTo(cx+ax,ty+ay+H+1);ctx.lineTo(cx+bx,ty+by+H+1);ctx.stroke();}}
+  if(!run){bubble(cx,cy-26+Math.sin(g.t*10)*3,13,'warn','#e0553d');}
+  if(g.tgt===s){ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.globalAlpha=.5+.5*Math.sin(g.t*8);ctx.beginPath();ctx.ellipse(cx,cy+2,RX+6,RY+5,0,0,7);ctx.stroke();ctx.globalAlpha=1;}
 }
 /* where the convention van is: leaves east, returns from the east, U-turns in the lot and backs into its space */
 const VAN_RT=7;
@@ -3215,14 +3261,23 @@ function showResult(g){
    TURN_SERVERS: optional relay servers so players behind strict firewalls / mobile networks can still connect.
    Example: [{urls:'turn:your.turn.host:3478',username:'user',credential:'secret'}]
    (A free account at metered.ca "Open Relay" or a self-hosted coturn both work.) */
-const TURN_SERVERS=[];
+let TURN_SERVERS=[],turnAt=0;
+/* Metered relay: fresh credentials are fetched when someone hosts or joins (the key only allows fetching TURN credentials) */
+const METERED={host:'niedergall.metered.live',key:'Uc44MWmh_T38VA4Hkxs9s-yi1gxy-OmZbfC206OGKQRsUhjt'};
+function prepTurn(done){
+  if(!METERED.key||(TURN_SERVERS.length&&Date.now()-turnAt<3000000))return done();
+  let fin=false;const end=()=>{if(!fin){fin=true;done();}};
+  const t=setTimeout(end,4500);
+  try{fetch('https://'+METERED.host+'/api/v1/turn/credentials?apiKey='+encodeURIComponent(METERED.key)).then(r=>r.ok?r.json():[]).then(a=>{if(Array.isArray(a)&&a.length){TURN_SERVERS=a;turnAt=Date.now();}}).catch(()=>{}).then(()=>{clearTimeout(t);end();});}catch(e){clearTimeout(t);end();}
+}
 const STUN_SERVERS=[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:global.stun.twilio.com:3478'}];
 /* networking library: your own copy next to the game first (peerjs.min.js), then public CDNs */
 const PEER_SRCS=[window.SNP_PEER_JS,'peerjs.min.js','https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js','https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js'].filter(Boolean);
-function loadPeer(ok,fail,i){
+function loadPeer(ok,fail){loadPeer0(()=>prepTurn(ok),fail);}
+function loadPeer0(ok,fail,i){
   if(window.Peer)return ok();
   i=i||0;if(i>=PEER_SRCS.length){fail('Could not load the networking library. Check your connection, or put peerjs.min.js next to the game.');return;}
-  const sc=document.createElement('script');sc.crossOrigin='anonymous';sc.src=PEER_SRCS[i];sc.onload=()=>{if(window.Peer)ok();else{sc.remove();loadPeer(ok,fail,i+1);}};sc.onerror=()=>{sc.remove();loadPeer(ok,fail,i+1);};document.head.appendChild(sc);
+  const sc=document.createElement('script');sc.crossOrigin='anonymous';sc.src=PEER_SRCS[i];sc.onload=()=>{if(window.Peer)ok();else{sc.remove();loadPeer0(ok,fail,i+1);}};sc.onerror=()=>{sc.remove();loadPeer0(ok,fail,i+1);};document.head.appendChild(sc);
 }
 function peerOpts(){const o=Object.assign({},window.SNP_PEER||{});o.config=Object.assign({iceServers:STUN_SERVERS.concat(TURN_SERVERS)},o.config||{});return o;}
 const mkPeer=id=>id?new Peer(id,peerOpts()):new Peer(peerOpts());
@@ -3250,24 +3305,29 @@ function netCheck(){
   return true;
 }
 function netTry(fn){try{fn();}catch(e){onMsg('Online play could not start: '+(e&&e.message||e)+'. If this game is shown inside another page or app, open it directly in your browser.');}}
+/* one connection attempt at a time: repeated clicks / taps on Host or Join are ignored until it succeeds, fails or times out */
+function setBusy(b){NET.busy=b;clearTimeout(NET.busyT);if(b)NET.busyT=setTimeout(()=>setBusy(false),22000);for(const id of ['onHost','onJoin']){const e=$(id);if(e)e.disabled=!!b;}}
 function netHost(){
+  if(NET.busy||NET.role)return;
   if(!netCheck())return;
-  onMsg('Starting a room...');
-  loadPeer(()=>netTry(()=>tryCode(0)),onMsg);
+  setBusy(true);onMsg('Starting a room...');
+  loadPeer(()=>netTry(()=>tryCode(0)),m=>{setBusy(false);onMsg(m);});
 }
 function tryCode(n){
   const code=Array.from({length:4},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ'[Math.floor(Math.random()*24)]).join('');
   const peer=mkPeer('snp-'+code);
-  peer.on('open',()=>{NET.role='host';NET.peer=peer;NET.code=code;NET.guests=new Map();NET.live=false;peer.on('connection',hostConn);onMsg('');showOnline();});
+  peer.on('open',()=>{setBusy(false);NET.role='host';NET.peer=peer;NET.code=code;NET.guests=new Map();NET.live=false;peer.on('connection',hostConn);onMsg('');showOnline();});
   peer.on('error',e=>{
     if(e.type==='unavailable-id'&&n<6){try{peer.destroy();}catch(x){}tryCode(n+1);return;}
     if(NET.role==='host'){onMsg('Network hiccup: '+e.type);return;}
-    onMsg('Could not start a room ('+e.type+').');
+    setBusy(false);onMsg('Could not start a room ('+e.type+').');
   });
 }
 const okIn=(v,l)=>l.includes(v);
 function hostConn(c){
-  const gs={conn:c,seen:performance.now(),pid:0,last:new Map(),lastG:{},inp:{ix:0,iy:0,down:false,edge:false}};
+  const rid=typeof c.peer==='string'?c.peer:c.remote;
+  for(const o of NET.guests.values())if(o.rid&&o.rid===rid){try{c.close();}catch(e){}return;}
+  const gs={conn:c,rid,seen:performance.now(),pid:0,last:new Map(),lastG:{},inp:{ix:0,iy:0,down:false,edge:false}};
   c.on('data',d=>{
     let m;try{m=JSON.parse(d);}catch(e){return;}
     gs.seen=performance.now();
@@ -3316,6 +3376,7 @@ function netLobby(){
 }
 function netStop(msg){
   clearInterval(NET.ping);
+  setBusy(false);
   const was=NET.role;NET.role=null;NET.live=false;
   for(const gs of NET.guests.values())try{gs.conn.close();}catch(e){}
   NET.guests=new Map();try{if(NET.conn)NET.conn.close();}catch(e){}try{if(NET.peer)NET.peer.destroy();}catch(e){}
@@ -3351,21 +3412,22 @@ function hostTick(g,dt){
 }
 /* ---- guest ---- */
 function netJoin(code){
+  if(NET.busy||NET.role)return;
   code=(code||'').trim().toUpperCase();if(code.length!==4){onMsg('Enter the 4-letter room code.');return;}
-  onMsg('Connecting...');
   if(!netCheck())return;
+  setBusy(true);onMsg('Connecting...');
   loadPeer(()=>netTry(()=>{
     const peer=mkPeer();NET.peer=peer;let opened=false;
-    peer.on('error',e=>{if(!opened){onMsg(e.type==='peer-unavailable'?'No room with that code.':'Could not connect ('+e.type+').');try{peer.destroy();}catch(x){}NET.peer=null;}});
+    peer.on('error',e=>{if(!opened){setBusy(false);onMsg(e.type==='peer-unavailable'?'No room with that code.':'Could not connect ('+e.type+').');try{peer.destroy();}catch(x){}NET.peer=null;}});
     peer.on('open',()=>{
       const c=peer.connect('snp-'+code,{reliable:true});NET.conn=c;
-      setTimeout(()=>{if(!opened){onMsg(TURN_SERVERS.length?'Could not reach that room. Check the code.':'Could not reach that room. Check the code - or a firewall may be blocking direct connections (the site owner can add a relay server).');try{peer.destroy();}catch(x){}NET.peer=null;NET.conn=null;}},15000);
-      c.on('open',()=>{opened=true;NET.role='guest';NET.code=code;onMsg('');c.send(JSON.stringify({t:'hello',char:CHAR}));showOnline();NET.ping=setInterval(()=>{if(c.open)c.send('{"t":"ping"}');},2000);});
+      setTimeout(()=>{if(!opened){setBusy(false);onMsg(TURN_SERVERS.length?'Could not reach that room. Check the code.':'Could not reach that room. Check the code - or a firewall may be blocking direct connections (the site owner can add a relay server).');try{peer.destroy();}catch(x){}NET.peer=null;NET.conn=null;}},15000);
+      c.on('open',()=>{opened=true;setBusy(false);NET.role='guest';NET.code=code;onMsg('');c.send(JSON.stringify({t:'hello',char:CHAR}));showOnline();NET.ping=setInterval(()=>{if(c.open)c.send('{"t":"ping"}');},2000);});
       c.on('data',guestData);
       c.on('close',()=>{if(NET.role==='guest')netLeave('The host left the game.');});
       c.on('error',()=>{});
     });
-  }),onMsg);
+  }),m=>{setBusy(false);onMsg(m);});
 }
 function guestData(d){
   let m;try{m=JSON.parse(d);}catch(e){return;}
