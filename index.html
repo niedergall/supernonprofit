@@ -275,7 +275,7 @@ const HAIRS=['#2a1d14','#4a3424','#8a5a2b','#d9a441','#c0452d','#8a8f99'];
 const HATS=['none','cap','beanie','sunhat','hardhat'],HAT_NAMES=['None','Cap','Beanie','Sun hat','Hard hat'],PATS=['none','stripes','dots','check','logo'],PAT_NAMES=['Plain','Stripes','Dots','Check','Logo'];
 const FACIALS=['none','mustache','goatee','beard'],FACIAL_NAMES=['None','Mustache','Goatee','Beard'];
 const STYLES=['short','spiky','long','ponytail','curly','bun','buzz','bob','pigtails','mohawk','afro','bald'],STYLE_NAMES=['Short','Spiky','Long','Ponytail','Curly','Bun','Buzz','Bob','Pigtails','Mohawk','Afro','Bald'],ACCS=['none','glasses','badge'],ACC_NAMES=['None','Glasses','Badge'];
-const COFFEE_URL='https://www.buymeacoffee.com/BrentNiedergall';
+const COFFEE_URL='https://buymeacoffee.com/niedergall';
 let TOUCH=false;
 const joy={x:0,y:0,m:0};
 const MALE_NAMES=['James','John','Robert','Michael','William','David','Richard','Joseph','Thomas','Charles','Daniel','Matthew','Anthony','Mark','Paul','Steven','Andrew','Kenneth','George','Joshua','Kevin','Brian','Edward','Ronald','Timothy','Jason','Jeffrey','Ryan','Jacob','Gary','Nicholas','Eric','Stephen','Jonathan','Larry','Scott','Samuel','Benjamin','Henry','Peter'];
@@ -2842,9 +2842,9 @@ function drawPlayer(g,p){
       ctx.strokeStyle=shade(p.color,-30);ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(hx,hy-13.3);ctx.quadraticCurveTo(hx+fx*3,hy-8,hx+fx*5,hy-2.6);ctx.stroke();
       if(fy>-.45){ /* the bill: a flat half-disc pointing the way the player faces (hidden behind the head when facing away) */
         const px=-fy,py=fx,r0=8.6,L=7.2,Wd=6,pts=[];
-        for(let k=0;k<=12;k++){const a=-Math.PI/2+k/12*Math.PI,t=Math.cos(a),sv=Math.sin(a);pts.push([fx*(r0+t*L)+px*sv*Wd,(fy*(r0+t*L)+py*sv*Wd)*.4]);}
-        for(let k=12;k>=0;k--){const a=-Math.PI/2+k/12*Math.PI,sv=Math.sin(a);pts.push([fx*r0*.9+px*sv*Wd*.92,(fy*r0*.9+py*sv*Wd*.92)*.4]);}
-        const by=hy-3.8;ctx.beginPath();pts.forEach(([a,b],i)=>i?ctx.lineTo(hx+a,by+b):ctx.moveTo(hx+a,by+b));ctx.closePath();
+        for(let k=0;k<=12;k++){const a=-Math.PI/2+k/12*Math.PI,t=Math.cos(a),sv=Math.sin(a);pts.push([fx*(r0+t*L)+px*sv*Wd,(fy*(r0+t*L)+py*sv*Wd)*.33]);}
+        for(let k=12;k>=0;k--){const a=-Math.PI/2+k/12*Math.PI,sv=Math.sin(a);pts.push([fx*r0*.9+px*sv*Wd*.92,(fy*r0*.9+py*sv*Wd*.92)*.33]);}
+        const by=hy-5.4;ctx.beginPath();pts.forEach(([a,b],i)=>i?ctx.lineTo(hx+a,by+b):ctx.moveTo(hx+a,by+b));ctx.closePath();
         ctx.fillStyle=shade(p.color,-38);ctx.fill();ctx.strokeStyle='rgba(20,15,25,.5)';ctx.lineWidth=1;ctx.stroke();
         ctx.strokeStyle='rgba(255,255,255,.22)';ctx.lineWidth=1;ctx.beginPath();for(let k=1;k<12;k++){const a=-Math.PI/2+k/12*Math.PI,t=Math.cos(a),sv=Math.sin(a),a1=fx*(r0+t*L*.82)+px*sv*Wd*.82,b1=(fy*(r0+t*L*.82)+py*sv*Wd*.82)*.4;k===1?ctx.moveTo(hx+a1,by+b1):ctx.lineTo(hx+a1,by+b1);}ctx.stroke();
       }
